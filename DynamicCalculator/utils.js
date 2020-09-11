@@ -25,7 +25,7 @@ let add_item_to_list_with_template = (template_function) => {
     */
     let itemName = document.querySelector("#item-name").value;
     let itemPrice = document.querySelector('#item-value').value;
-    if (itemName == '' || itemPrice.trim() == '') return;
+    if (itemName.trim() == '' || itemPrice.trim() == '') return;
     let template = template_function(itemName, itemPrice);
     let itemList = document.getElementById("items");
     itemList.appendChild(template);
