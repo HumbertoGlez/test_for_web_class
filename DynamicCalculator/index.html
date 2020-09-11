@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>lab items list</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <script src="./utils.js"></script>
   <script>
     // DOMContentLoaded wait until all dom is loaded, check the docs in below link
@@ -12,9 +13,8 @@
     document.addEventListener("DOMContentLoaded", (event) => {
       let item_name = document.querySelector("#item-name");
       let item_value = document.querySelector("#item-value");
-      // use here what you have in utils.js
       document.getElementById("add-item").addEventListener("click", addHandler);
-      document.getElementById("remove-item").addEventListener("click", remove_item);
+      
 
     });
   </script>
@@ -28,6 +28,25 @@
   <ul id="items">
 
   </ul>
-  <div id="total"></div>
+  <div class="total-text">Total: <span id="total">0</span></div>
 </body>
+<style>
+  html {
+    font-family: 'Roboto', sans-serif;
+  }
+  .invalid-input{
+    border: thick groove red;
+  }
+  body{
+    background-color: #2b2b30;
+    color: white;
+  }
+  li {
+    margin: 5px 0px 5px 0px;
+    white-space: pre;
+  }
+  .remove-item{
+    margin: 0px 0px 0px 16px;
+  }
+</style>
 </html>
