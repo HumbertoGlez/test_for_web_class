@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon cards</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="./utils.js"></script>
+</head>
+
+<body>
+    
+    <div id="title">
+        <h1 class="text-center m-1">Rock, Paper, Scissors</h1>
+    </div>
+    <hr/>
+    <!-- Actions -->
+    <div id="LobbyActions" class="m-3">
+
+        <div class="row justify-content-between">
+            <div class="col">
+            <!-- Create card -->
+            <div class="card text-white bg-primary  h-100">
+                <div class="card-header">
+                    <h4>Create game</h4>
+                </div>
+                <div class="card-body">
+                    
+                
+                    <label class="col-form-label" for="card-name-create">Username:</label>
+                    <input class="form-control" type="text" id="card-name-create" name="card-name-create">
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+                    
+                    <button class="btn btn-secondary float-right" id="create-card">Create</button>
+                </div>
+            </div>
+            </div>
+            <!-- Get card -->
+            <div class="col">
+            <div class="card text-white bg-primary  h-100">
+                <div class="card-header">
+                        <h4>Join game</h4>
+                </div>
+                <div class="card-body">
+                    <label class="col-form-label" for="card-name-get">Username:</label>
+                    <input class="form-control" type="text" id="card-name-get" name="card-name-get">
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+
+                    <label class="col-form-label" for="card-game-get">Game ID:</label>
+                    <input class="form-control" type="text" id="card-game-get" name="card-game-get">
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+    
+                    <button class="btn btn-secondary float-right" id="join-card">Join</button>
+                </div>
+            </div>
+            </div>
+           
+        </div>
+    </div>
+    <hr/>
+
+    <div id="infoPane">
+        <h2>Game ID: <span id="gameIDTitle"></span></h2>
+        <h3>Player: <span id="playerIDTitle"></span></h3>
+    </div>
+    <div id="game">
+        <div class="row row-cols-2 m-3 justify-content-center">
+            <div class="pr-3 col text-center">
+                <img id="p1Command" src="thinking.png" width="40%">
+
+            </div>
+            <div class="pl-3 col text-center">
+
+                <img id="p2Command" src="thinking.png" width="40%">
+            </div>
+        </div>
+        <div class="row row-cols-2 justify-content-center">
+            <div  id="p1-buttons">
+                <button class="btn btn-lg btn-primary button-img buttonRock" id="p1Rock-b"><img src="rock.png" height="30"> Rock</button>
+                <button class="btn btn-lg btn-primary button-img buttonPaper" id="p1Paper-b"><img src="paper.png" height="30"> Paper</button>
+                <button class="btn btn-lg btn-primary button-img buttonScissors" id="p1Scissors-b"><img src="scissors.png" height="30"> Scissors</button>
+            </div>
+            <div id="p2-buttons">
+                <button class="btn btn-lg btn-primary button-img buttonRock" id="p2Rock-b"><img src="rock.png" height="30"> Rock</button>
+                <button class="btn btn-lg btn-primary button-img buttonPaper" id="p2Paper-b"><img src="paper.png" height="30"> Paper</button>
+                <button class="btn btn-lg btn-primary button-img buttonScissors" id="p2Scissors-b"><img src="scissors.png" height="30"> Scissors</button>
+            </div>
+        </div>
+    </div>
+    
+    <hr/>
+
+</body>
+</html>

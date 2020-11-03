@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon cards</title>
+    <link rel="stylesheet" href="style/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="./utils.js"></script>
+</head>
+
+<body>
+    
+    <div id="title">
+        <h1 class="text-center m-1">Pokémon Cards</h1>
+    </div>
+    <hr/>
+    <!-- Actions -->
+    <div class="m-3">
+
+        <div class="row justify-content-between">
+            <div class="col">
+            <!-- Create card -->
+            <div class="card text-white bg-primary">
+                <div class="card-header">
+                    <h4>Create card</h4>
+                </div>
+                <div class="card-body">
+                    <label class="col-form-label" for="card-type">Type:</label>
+                    <select class="custom-select" name="card-type" id="card-type">
+                        <option value="pokemon">Pokémon</option>
+                        <option value="item">Item</option>
+                        <option value="prize">Prize</option>
+                        <option value="element">Element</option>
+                    </select>
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+                
+                    <label class="col-form-label" for="card-name-create">Name:</label>
+                    <input class="form-control" type="text" id="card-name-create" name="card-name-create">
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+                    
+                    <label class="col-form-label" for="card-details-create">Details:</label>
+                    <textarea class="form-control" type="text" id="card-details-create" name="card-details-create"
+                        style="resize: none" rows="3">
+                    </textarea>
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+                    
+                    <button class="btn btn-secondary float-right" id="create-card">Create</button>
+                </div>
+            </div>
+            </div>
+            <!-- Get card -->
+            <div class="col">
+            <div class="card text-white bg-primary">
+                <div class="card-header">
+                    <div class="row space-between">
+                        <div class="col">
+                            <h4>Get card</h4>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-secondary float-right" id="getall-cards">Get all</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <label class="col-form-label" for="card-name-get">Name:</label>
+                    <input class="form-control" type="text" id="card-name-get" name="card-name-get">
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+    
+                    <button class="btn btn-secondary float-right" id="get-card">Get</button>
+                </div>
+            </div>
+            </div>
+            <!-- Update card -->
+            <div class="col">
+            <div class="card text-white bg-primary">
+                <div class="card-header">
+                    <h4>Update card</h4>
+                </div>
+                <div class="card-body">
+                    <label class="col-form-label" for="card-name-update">Name:</label>
+                    <input class="form-control" type="text" id="card-name-update" name="card-name-update">
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+    
+                    <label class="col-form-label" for="card-details-update">Details:</label>
+                    <textarea class="form-control" type="text" id="card-details-update" name="card-details-update"
+                        style="resize: none" rows="3">
+                    </textarea>
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+    
+                    <button class="btn btn-secondary float-right" id="update-card">Update</button>
+                </div>
+            </div>
+            </div>
+            <!-- Delete card -->
+            <div class="col">
+            <div class="card text-white bg-primary">
+                <div class="card-header">
+                    <div class="row space-between">
+                        <div class="col">
+                            <h4>Delete card</h4> 
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-secondary btn-sm float-right" id="deleteall-cards">Delete all</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <label class="col-form-label" for="card-name-update">Name:</label>
+                    <input class="form-control" type="text" id="card-name-delete" name="card-name-delete">
+                    <div class="flex-break" style="margin-top: 1em;"></div>
+        
+                    <button class="btn btn-secondary float-right" id="delete-card">Delete</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        <hr/>
+    
+        <div class="row row-cols-1  row-cols-sm-2 row-cols-md-3 row-cols-lg-5 m-3 justify-content-center" id="pokemon-list">
+            
+        </div>
+    
+        <hr/>
+
+</body>
+</html>

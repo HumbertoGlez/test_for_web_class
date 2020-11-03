@@ -1,0 +1,16 @@
+#infoPane{
+    display: none;
+}
+#game {
+    display: none;
+}
+
+#p1-buttons{
+    display: flex;
+    justify-content: center;
+}
+
+#p2-buttons{
+    display: flex;
+    justify-content: center;
+}
