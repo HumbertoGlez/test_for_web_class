@@ -32,6 +32,9 @@ db.once('open', function() {
             },
             command: {
                 type: Number
+            },
+            isPlaying: {
+                type: Boolean
             }
         },
         player2: { 
@@ -40,6 +43,9 @@ db.once('open', function() {
             },
             command: {
                 type: Number
+            },
+            isPlaying: {
+                type: Boolean
             }
         }
     });
@@ -58,6 +64,7 @@ db.once('open', function() {
         newGame.gameID = '_' + Math.random().toString(36).substr(2, 9);
         newGame.player1.playerID = req.params["username"];
         newGame.player1.command = 0;
+        newGame.player1.isPlaying = false;
         
         const result = await Game.findOne({gameID: newGame.gameID}).exec();
         while (result != null) {
@@ -67,11 +74,12 @@ db.once('open', function() {
         newGame.save(function (err, result) {
             if (err) {
                 console.log(err);
+                res.send("error")
             } else {
                 console.log(result);
+                res.send("success:" + newGame.gameID);
             }
         });
-        res.send("success:" + newGame.gameID);
     });
 
     // Get game status
@@ -100,7 +108,7 @@ db.once('open', function() {
             res.send("error:duplicate_name");
         }
 
-        await Game.updateOne({gameID: gameID}, {player2:{playerID: playerID, command: 0}},
+        await Game.updateOne({gameID: gameID}, {player2:{playerID: playerID, command: 0, isPlaying: false}},
             function (err, res2) {
                 if (err) {
                     console.log(err);
@@ -150,6 +158,43 @@ db.once('open', function() {
             );
         }
     });
+
+    // set isPlaying
+    app.put('/isPlaying/:gameID,:isP1,:isPlaying', async (req, res) => {
+        const gameID = req.params["gameID"];
+        let isP1 = req.params["isP1"];
+        let isPlaying = req.params["isPlaying"];
+        console.log(isP1);
+        if (isP1 == 1) {
+            await Game.updateOne({gameID: gameID}, {$set: {"player1.isPlaying": isPlaying}},
+                function (err, res2) {
+                    if (err) {
+                        console.log(err);
+                        res.send("error:game_not_found");
+                    }
+                    else {
+                        console.log(res2);
+                        res.send("success");
+                    }
+                }
+            );
+        }
+        else {
+            await Game.updateOne({gameID: gameID}, {$set: {"player2.isPlaying": isPlaying}},
+                function (err, res2) {
+                    if (err) {
+                        console.log(err);
+                        res.send("error:game_not_found");
+                    }
+                    else {
+                        console.log(res2);
+                        res.send("success");
+                    }
+                }
+            );
+        }
+    });
+
 
     app.listen(port)
 });

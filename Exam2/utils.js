@@ -30,7 +30,7 @@ let create_game_handler = (_) => {
                 document.getElementById("p1-buttons").style.display = "flex";
                 let isPlayer1 = 1;
 
-                setTimeout(function(){ get_game_handler(myID, isPlayer1); }, 5000);
+                setTimeout(function(){ get_game_handler(myID, isPlayer1); }, 2000);
                 return;
             }
             else {
@@ -83,7 +83,7 @@ let join_game_handler = (_) => {
                 document.getElementById("p1-buttons").style.display = "none";
                 document.getElementById("p2-buttons").style.display = "flex";
                 let isPlayer1 = 0;
-                setTimeout(function(){ get_game_handler(myID, isPlayer1); }, 5000);
+                get_game_handler(myID, isPlayer1);
                 return;
             }
             
@@ -103,6 +103,18 @@ let get_game_handler = (gameID, isP1) => {
             if (typeof(resp.data) === 'string' && resp.data.includes("error")) {
                 alert(`The game could not be obtained. (${resp.data})`);
                 return;
+            }
+            if (isP1 == 1 && resp.data.player1.isPlaying && resp.data.player1.command == 0) {
+                document.getElementById("p1Rock-b").disabled = false;
+                document.getElementById("p1Paper-b").disabled = false;
+                document.getElementById("p1Scissors-b").disabled = false;
+                document.getElementById("waitingBanner").style.display = "none";
+            }
+            else if (isP1 == 0 && resp.data.player2.isPlaying && resp.data.player2.command == 0) {
+                document.getElementById("p2Rock-b").disabled = false;
+                document.getElementById("p2Paper-b").disabled = false;
+                document.getElementById("p2Scissors-b").disabled = false;
+                document.getElementById("waitingBanner").style.display = "none";
             }
             let currentImg = document.getElementById("p1Command");
             switch(resp.data.player1.command) {
@@ -144,11 +156,28 @@ let get_game_handler = (gameID, isP1) => {
             let img1 = document.getElementById("p1Command");
             let img2 = document.getElementById("p2Command");
             console.log(img1.src.substr(img1.src.lastIndexOf('/')) + "\n" + img2.src.substr(img2.src.lastIndexOf('/')));
-            if (img1.src.substr(img1.src.lastIndexOf('/')) != "/thinking.png" && img2.src.substr(img2.src.lastIndexOf('/')) != "/thinking.png") {
+
+            let isPlayingCheck;
+            if (isP1 == 1) isPlayingCheck = resp.data.player1.isPlaying;
+            else if (isP1 == 0) isPlayingCheck = resp.data.player2.isPlaying;
+            console.log(isPlayingCheck);
+            if (resp.data.player1.command != 0 && resp.data.player2 && resp.data.player2.command != 0 && isPlayingCheck) {
                 check_victory(thisID, isP1, resp.data.player1.command, resp.data.player2.command);
             }
+            else if (!resp.data.player1.isPlaying && resp.data.player2 && !resp.data.player2.isPlaying) {
+                playing_handler(true, 1);
+                playing_handler(true, 0);
+                document.getElementById("p1Rock-b").disabled = false;
+                document.getElementById("p1Paper-b").disabled = false;
+                document.getElementById("p1Scissors-b").disabled = false;
+                document.getElementById("p2Rock-b").disabled = false;
+                document.getElementById("p2Paper-b").disabled = false;
+                document.getElementById("p2Scissors-b").disabled = false;
+                document.getElementById("waitingBanner").style.display = "none";
+                setTimeout(function(){ get_game_handler(thisID, isP1); }, 2000);
+            }
             else {
-                setTimeout(function(){ get_game_handler(thisID, isP1); }, 5000);
+                setTimeout(function(){ get_game_handler(thisID, isP1); }, 2000);
             }
         }).catch(function(error) {
             console.log(error);
@@ -523,7 +552,7 @@ let check_victory = (gameID, isP1, p1Move, p2Move) => {
     else {
         swal({
             title: "It's a Tie!", 
-            text: "You've chosen the same!, booo!", 
+            text: "You've chosen the same! booo!", 
             icon: "info",
             buttons: {
                 retry: {
@@ -551,23 +580,32 @@ let check_victory = (gameID, isP1, p1Move, p2Move) => {
 }
 
 let reset_game = (isP1) => {
+    playing_handler(false, isP1);
     let thisID = document.getElementById("gameIDTitle").innerText;
+    if (isP1 == 1) {
+        get_playing_status(thisID, 0).then(value => {
+            console.log("ISPLAYING 2 =" + value);
+            if (value == false) {
+                get_game_handler(thisID, isP1);
+                return;
+            }
+        })
+    }
+    else if (isP1 == 0) {
+        get_playing_status(thisID, 1).then(value => {
+            console.log("ISPLAYING 1 =" + value);
+            if (value == false) {
+                get_game_handler(thisID, isP1);
+                return;
+            }
+        })
+    }
+
     command_handler_(0, 0);
-    get_game_handler(thisID, isP1);
     command_handler_(0, 1);
     get_game_handler(thisID, isP1);
     document.getElementById("p1Command").src = 'thinking.png';
     document.getElementById("p2Command").src = 'thinking.png';
-    if (isP1 == 1) {
-        document.getElementById("p1Rock-b").disabled = false;
-        document.getElementById("p1Paper-b").disabled = false;
-        document.getElementById("p1Scissors-b").disabled = false;
-    }
-    else if (isP1 == 0) {
-        document.getElementById("p2Rock-b").disabled = false;
-        document.getElementById("p2Paper-b").disabled = false;
-        document.getElementById("p2Scissors-b").disabled = false;
-    }
     
 }
 
@@ -598,11 +636,13 @@ let command_handler = (command, isP1) => {
         document.getElementById("p1Rock-b").disabled = true;
         document.getElementById("p1Paper-b").disabled = true;
         document.getElementById("p1Scissors-b").disabled = true;
+        document.getElementById("waitingBanner").style.display = "block";
     }
     else if (isP1 == 0) {
         document.getElementById("p2Rock-b").disabled = true;
         document.getElementById("p2Paper-b").disabled = true;
         document.getElementById("p2Scissors-b").disabled = true;
+        document.getElementById("waitingBanner").style.display = "block";
     }
     axios
         .put(`http://localhost:8080/command/${gameID},${isP1},${command},${username}`)
@@ -616,6 +656,45 @@ let command_handler = (command, isP1) => {
                 return;
             }
             
+        }).catch(function(error) {
+            console.log(error);
+            alert("There was an error obtaining the data.");
+        });
+}
+
+let playing_handler = (isPlaying, isP1) => {
+    const gameID = document.getElementById("gameIDTitle").innerText;
+    axios
+        .put(`http://localhost:8080/isPlaying/${gameID},${isP1},${isPlaying}`)
+        .then(resp => {
+            if (resp.data.includes("error")) {
+                alert(`The command could not be applied. (${resp.data})`);
+                return;
+            } else if (resp.data.includes("success")) {
+                return;
+            }
+            
+        }).catch(function(error) {
+            console.log(error);
+            alert("There was an error obtaining the data.");
+        });
+}
+
+let get_playing_status = async (gameID, isP1) => {
+    
+    axios
+        .get(`http://localhost:8080/getGame/${gameID}`)
+        .then(resp => {
+            if (typeof(resp.data) === 'string' && resp.data.includes("error")) {
+                alert(`The game could not be obtained. (${resp.data})`);
+                return;
+            }
+            if (isP1 == 1) {
+                return resp.data.player1.isPlaying;
+            }
+            else if (isP1 == 0) {
+                return resp.data.player2.isPlaying;
+            }
         }).catch(function(error) {
             console.log(error);
             alert("There was an error obtaining the data.");
